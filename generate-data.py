@@ -16,10 +16,10 @@ def main():
 
     # varaibles to generate example data model
     start_date = date(2019, 1, 1)
-    total_days = 2
-    txn_per_day = 2
-    acct_count = 2
-    location_cardinality = 5
+    total_days = 365 * 2
+    txn_per_day = 250
+    acct_count = 10
+    location_cardinality = 10
     zlib_level = -1
 
     # connect to Aerospike
@@ -53,15 +53,15 @@ def main():
                     })
         
         # write each record
-        print(objects)
         start = time()
         for pk, record in objects.items():
-            if object_type == 'cdt':
+
+            if object_type == 'blob':
+                record_data = {'object': zlib.compress(json.dumps(record).encode("utf-8"), zlib_level)}
+
+            elif object_type == 'cdt':
                 record_data = record
 
-            elif object_type == 'blob':
-                record_data = {'object': zlib.compress(json.dumps(record).encode("utf-8"), zlib_level)}
-        
             key = (namespace, set_name, pk)
             client.put(key, record_data, 
                     policy={'exists': aerospike.POLICY_EXISTS_CREATE_OR_REPLACE}
