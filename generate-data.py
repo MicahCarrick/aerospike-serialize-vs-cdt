@@ -45,7 +45,7 @@ def main():
                     objects[pk]['txns'][map_key].append({
                         'txn': txn,
                         'ts':  ts,
-                        'sku': randint(1000, 9999),
+                        'sku': randint(1000, 1025),
                         'cid': ''.join(choice(ascii_uppercase) for i in range(12)),
                         'amt': randint(10, 999999),
                         'qty': randint(1, 99),
